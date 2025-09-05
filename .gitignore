@@ -1,0 +1,10 @@
+# 不要上傳環境變數檔
+.env
+
+# 不要上傳所有 JSON 金鑰檔
+*.json
+
+# Python 產生的暫存檔
+__pycache__/
+*.pyc
+*.pyo
