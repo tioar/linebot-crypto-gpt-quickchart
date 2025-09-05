@@ -91,11 +91,17 @@ def msg_short(symbol, timeframe, entry, last_close, rsi, ema20, ema50,
 # =========================
 # FastAPI
 # =========================
+import os
+from fastapi import FastAPI
+
+SHEET_ID = os.getenv("SHEET_ID")
+
 app = FastAPI()
 
 @app.get("/health")
 def health():
     return {"ok": True, "sheet_connected": bool(SHEET_ID)}
+
 
 class LineEvent(BaseModel):
     destination: str | None = None
