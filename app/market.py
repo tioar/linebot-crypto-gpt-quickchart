@@ -39,4 +39,31 @@ def ta_summary(df: pd.DataFrame) -> dict:
         "ema20": float(last["ema20"]),
         "ema50": float(last["ema50"]),
         "rsi": float(last["rsi"])
+def sma(values, length):
+    if len(values) < length: return None
+    return sum(values[-length:]) / length
+
+def ema(values, length):
+    if len(values) < length: return None
+    k = 2 / (length + 1)
+    ema_val = sum(values[:length]) / length  # 初始用SMA
+    for v in values[length:]:
+        ema_val = v * k + ema_val * (1 - k)
+    return ema_val
+
+def rsi(closes, length=14):
+    if len(closes) <= length: return None
+    gains, losses = [], []
+    for i in range(1, len(closes)):
+        chg = closes[i] - closes[i-1]
+        gains.append(max(chg, 0.0))
+        losses.append(max(-chg, 0.0))
+    avg_gain = sum(gains[:length]) / length
+    avg_loss = sum(losses[:length]) / length
+    for i in range(length, len(gains)):
+        avg_gain = (avg_gain*(length-1) + gains[i]) / length
+        avg_loss = (avg_loss*(length-1) + losses[i]) / length
+    rs = float('inf') if avg_loss == 0 else avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
+
     }
